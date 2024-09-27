@@ -160,6 +160,7 @@ ________________________________________________________________________________
 A* search
 """
 def a_star(initial_state):
+    global aux_counter
     q = PriorityQueue()
     # Cost is the priority comparative value
     q.put((0 + heuristic(initial_state), 0, initial_state, [initial_state], 0))
@@ -172,7 +173,10 @@ def a_star(initial_state):
         if state not in visited:
             visited.append(state)
             successors = generate_successors(state, path)
+            aux_counter += 1
             for successor, succ_cost in successors:
+                
+                print("Auxiliar counter: ", aux_counter)
                 new_g = g + succ_cost
                 new_path = path + [successor]
                 q.put((new_g + heuristic(successor), new_g, successor, new_path, expanded_count + 1))
@@ -187,6 +191,7 @@ ________________________________________________________________________________
 Greedy search
 """
 def greedy(initial_state):
+    global aux_counter
     # Greedy search
     q = PriorityQueue()
     # Heuristic is the priority comparative value
@@ -200,6 +205,7 @@ def greedy(initial_state):
         if state not in visited:
             visited.append(state)
             successors = generate_successors(state, path)
+            aux_counter += 1
             for successor, succ_cost in successors:
                 new_h = heuristic(successor)
                 new_path = path + [successor]
@@ -213,16 +219,14 @@ def greedy(initial_state):
 # Main
 if __name__ == "__main__":
     # Get the parameters entered on terminal
-    args = sys.argv[1:]
-
-    algorithm = args[0]
-    size = int(args[1])
-    items = [int(i) for i in args[2:-1]]
+    global aux_counter
+    aux_counter = 0
+    algorithm = "G"
+    size = 10
+    items = [8, 3, 1, 4, 6, 5, 8, 7, 2, 9, 10, 15, 12]
 
     # If param PRINT is given -> print intermediate states
-    print_path = False
-    if args[-1] == "PRINT":
-        print_path = True
+    print_path = True
 
     path = []
     expanded_count = 0
@@ -249,3 +253,5 @@ if __name__ == "__main__":
     else:
         output_str = " ".join(str(x) for x in path[-1])
         print(output_str)
+
+    print("Auxiliar counter: ", aux_counter)
